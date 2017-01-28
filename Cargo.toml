@@ -1,0 +1,10 @@
+[package]
+name = "rocket_asciii"
+version = "0.1.0"
+authors = ["Hendrik Sollich <hendrik@hoodie.de>"]
+
+[dependencies]
+rocket = "*"
+rocket_codegen = "*"
+rocket_contrib = "*"
+asciii = { path = "../asciii-rs", default-features = false }
