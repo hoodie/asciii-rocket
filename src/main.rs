@@ -29,33 +29,30 @@ fn doc(file: PathBuf) -> Option<NamedFile> {
 #[derive(FromForm, Debug)]
 struct Dir {
     year: Option<i32>,
-    tasks: Option<bool>,
     all: Option<bool>,
 }
 
 #[get("/", rank=2)]
 fn cal() -> Result<Content<String>, String> {
-    cal_params(Dir{year:None,tasks:None,all:None})
+    cal_params(Dir{year:None,all:None})
 }
 
 #[get("/", rank=2)]
 fn cal_plain() -> Result<Plain<String>, String> {
-    cal_plain_params(Dir{year:None,tasks:None,all:None})
+    cal_plain_params(Dir{year:None,all:None})
 }
 
 #[get("/?<dir>", rank=1)]
 fn cal_params(dir:Dir) -> Result<Content<String>, String> {
     let storage_dir = match dir {
-        Dir{tasks: _, all: Some(true), year:None} => StorageDir::All,
-        Dir{tasks: _, all: Some(true), year:Some(_)} => return Err("Ambiguous".into()),
-        Dir{tasks: _, all: None, year:Some(year)} => StorageDir::Archive(year),
-        Dir{tasks: _, all: None, year:None} => StorageDir::Working,
+        Dir{all: Some(true), year:None} => StorageDir::All,
+        Dir{all: Some(true), year:Some(_)} => return Err("Ambiguous".into()),
+        Dir{all: None, year:Some(year)} => StorageDir::Archive(year),
+        Dir{all: None, year:None} => StorageDir::Working,
         _ => StorageDir::Working,
     };
 
-    let tasks = dir.tasks == Some(true);
-
-    actions::calendar(storage_dir, tasks)
+    actions::calendar(storage_dir)
         .map(|s| Content(ContentType::new("text", "calendar"),s) )
         .map_err(|_|String::from("error"))
 }
@@ -63,16 +60,14 @@ fn cal_params(dir:Dir) -> Result<Content<String>, String> {
 #[get("/?<dir>", rank=1)]
 fn cal_plain_params(dir:Dir) -> Result<Plain<String>, String> {
     let storage_dir = match dir {
-        Dir{tasks: _, all: Some(true), year:None} => StorageDir::All,
-        Dir{tasks: _, all: Some(true), year:Some(_)} => return Err("Ambiguous".into()),
-        Dir{tasks: _, all: None, year:Some(year)} => StorageDir::Archive(year),
-        Dir{tasks: _, all: None, year:None} => StorageDir::Working,
+        Dir{all: Some(true), year:None} => StorageDir::All,
+        Dir{all: Some(true), year:Some(_)} => return Err("Ambiguous".into()),
+        Dir{all: None, year:Some(year)} => StorageDir::Archive(year),
+        Dir{all: None, year:None} => StorageDir::Working,
         _ => StorageDir::Working,
     };
 
-    let tasks = dir.tasks == Some(true);
-
-    actions::calendar(storage_dir, tasks)
+    actions::calendar(storage_dir)
         .map(|s| content::Plain(s) )
         .map_err(|_|String::from("error"))
 }

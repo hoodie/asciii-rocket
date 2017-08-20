@@ -1,10 +1,10 @@
 [package]
-name = "rocket_asciii"
+name = "asciii-cal-backend"
 version = "0.1.0"
 authors = ["Hendrik Sollich <hendrik@hoodie.de>"]
 
 [dependencies]
-rocket = "*"
-rocket_codegen = "*"
-rocket_contrib = "*"
-asciii = { path = "../asciii-rs", default-features = false }
+rocket = "0.3.2"
+rocket_codegen = "0.3.2"
+rocket_contrib = "0.3.2"
+asciii = { path = "../asciii", version= "3.1.0", default-features = false }
