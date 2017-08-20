@@ -7,4 +7,9 @@ authors = ["Hendrik Sollich <hendrik@hoodie.de>"]
 rocket = "0.3.2"
 rocket_codegen = "0.3.2"
 rocket_contrib = "0.3.2"
-asciii = { path = "../asciii", version= "3.1.0", default-features = false }
+
+[dependencies.asciii]
+git= "https://github.com/ascii-dresden/asciii"
+version= "3.1.0"
+default-features = false
+rev = "dd2618c42e50dcccc37b324929911b2ba64765d0"
